@@ -1,74 +1,123 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { useRef, useEffect } from 'react';
+import { Image, StyleSheet, Animated, TouchableOpacity, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useNavigation } from '@react-navigation/native';
+import { useColorScheme } from 'react-native';
+import { Colors } from '@/constants/Colors';
+
+// Custom Button Component
+const ThemedButton = ({ title, onPress }) => (
+  <TouchableOpacity style={styles.button} onPress={onPress}>
+    <ThemedText style={styles.buttonText}>{title}</ThemedText>
+  </TouchableOpacity>
+);
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const theme = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Animated.View style={{ ...styles.animatedContainer, opacity: fadeAnim }}>
+          {/* Logo */}
+          <Image
+            source={require('@/assets/images/homepage.jpg')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+
+          {/* Welcome Message */}
+          <ThemedText type="title" style={[styles.title, { color: theme.text }]}>
+            Welcome to My Job Sphere 🚀
+          </ThemedText>
+
+       
+          <ThemedText type="subtitle" style={[styles.subtitle, { color: theme.text }]}>
+            Your personalized job search assistant. Get hired faster!
+          </ThemedText>
+
+      
+          <ThemedView style={[styles.features, { backgroundColor: theme.tint }]}>
+            <ThemedText style={[styles.featureText, { color: theme.text }]}>🔍 Find job listings tailored to your skills</ThemedText>
+            <ThemedText style={[styles.featureText, { color: theme.text }]}>📩 Apply with one tap</ThemedText>
+            <ThemedText style={[styles.featureText, { color: theme.text }]}>📊 Track your applications in real time</ThemedText>
+            <ThemedText style={[styles.featureText, { color: theme.text }]}>📬 Get job alerts for new openings</ThemedText>
+            <ThemedText style={[styles.featureText, { color: theme.text }]}>📝 Save and edit your resume on the go</ThemedText>
+          </ThemedView>
+
+          
+          <ThemedButton title="Explore Jobs" onPress={() => navigation.navigate('SearchJobs')} />
+        </Animated.View>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  animatedContainer: {
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  logo: {
+    width: 200, // Adjusted for better visibility
+    height: 200,
+    marginBottom: 20,
   },
-});
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  features: {
+    alignItems: 'flex-start',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+    maxWidth: 350,
+    elevation: 3,
+    marginBottom: 20,
+  },
+  featureText: {
+    fontSize: 16,
+    marginBottom: 6,
+  },
+  button: {
+    backgroundColor: '#e12c2b', // Updated button color
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    elevation: 3,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#fff', 
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+})
