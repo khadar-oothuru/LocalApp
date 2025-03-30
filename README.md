@@ -56,11 +56,7 @@ Follow these steps to set up  LocalApp  on your local machine:
 
 
 
-## License 📜
 
- LocalApp  is open-source and available under the [MIT License](LICENSE). Feel free to use and modify it as needed.
-
----
 
 ## Contact 📧
 
