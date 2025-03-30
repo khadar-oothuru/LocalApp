@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.khadarommit .localapp",
+      "package": "com.khadarommit.localapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

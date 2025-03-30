@@ -16,7 +16,7 @@ const ThemedButton = ({ title, onPress }) => (
 export default function HomeScreen() {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const theme = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
+  const theme = useColorScheme() === 'dark' ? Colors.light : Colors.light;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -27,8 +27,9 @@ export default function HomeScreen() {
   }, []);
 
   return (
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
     <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      
         <Animated.View style={{ ...styles.animatedContainer, opacity: fadeAnim }}>
           {/* Logo */}
           <Image
@@ -59,8 +60,9 @@ export default function HomeScreen() {
           
           <ThemedButton title="Explore Jobs" onPress={() => navigation.navigate('SearchJobs')} />
         </Animated.View>
+        </ThemedView>
       </ScrollView>
-    </ThemedView>
+   
   );
 }
 
